@@ -3,11 +3,54 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import cv2
 import numpy as np
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg') # Cần thiết để vẽ biểu đồ ngầm trên server không có màn hình
+import matplotlib.pyplot as plt
+from fastapi import Form # Dùng để nhận tham số từ HTML form
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+# Cấp quyền cho cổng 5500 của Live Server
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Nạp thư mục chứa giao diện HTML
 templates = Jinja2Templates(directory="templates")
+
+# Color Histogram
+def generate_color_histogram(image_bgr, bins):
+    # Định nghĩa màu cho 3 kênh (Blue, Green, Red) của OpenCV
+    colors = ('b', 'g', 'r')
+    plt.figure(figsize=(5, 3))
+    
+    # Tính và vẽ biểu đồ cho từng kênh màu
+    for i, color in enumerate(colors):
+        hist = cv2.calcHist([image_bgr], [i], None, [bins], [0, 256])
+        plt.plot(hist, color=color, linewidth=1.5)
+        plt.xlim([0, bins])
+        
+    plt.title('Color Histogram', fontsize=10)
+    plt.xlabel('Bins', fontsize=8)
+    plt.ylabel('Số lượng Pixels', fontsize=8)
+    plt.tight_layout()
+
+    # Lưu biểu đồ vào bộ nhớ đệm thay vì lưu ra ổ cứng
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=100)
+    buf.seek(0)
+    
+    # Mã hóa biểu đồ thành chuỗi Base64
+    base64_string = base64.b64encode(buf.getvalue()).decode('utf-8')
+    plt.close() # Đóng biểu đồ để giải phóng bộ nhớ
+    
+    return base64_string
 
 
 def hsv_ratio(hsv_roi, object_mask, lower, upper):
@@ -359,9 +402,11 @@ async def home_page(request: Request):
     )
 
 
+
 @app.post("/analyze")
 async def analyze_image(
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    bins: int = Form(256) # <-- MỚI: Nhận tham số bins từ giao diện HTML
 ):
     """API Nhận ảnh từ giao diện, phân tích và trả về kết quả"""
 
@@ -393,6 +438,8 @@ async def analyze_image(
                 )
             )
         )
+        
+        # Gọi hàm xử lý phân loại cũ
         (
             result_img,
             mask_clean,
@@ -406,6 +453,9 @@ async def analyze_image(
             k_factor=1.8,
             min_area=2000
         )
+
+        # <-- MỚI: Gọi hàm vẽ Color Histogram ở đây -->
+        histogram_b64 = generate_color_histogram(img_resized, bins)
 
         if detected_fruits:
             best_fruit = max(
@@ -427,7 +477,8 @@ async def analyze_image(
             "detected_count": count,
             "total_area": total_area,
             "stats": stats,
-            "objects": detected_fruits
+            "objects": detected_fruits,
+            "histogram_b64": histogram_b64 # <-- MỚI: Trả về thêm chuỗi biểu đồ
         }
         
     except Exception as e:
