@@ -34,6 +34,72 @@
                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </div>
 
+            <!-- ====================================================== -->
+            <!-- BỔ SUNG: Cấu hình tham số HSV -->
+            <!-- ====================================================== -->
+            
+            <div class="mt-4 px-4 mb-4">
+            
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">
+                    Tham số xử lý HSV:
+                </h3>
+            
+                <!-- K Factor -->
+                <div class="mb-3">
+            
+                    <label
+                        for="kFactorInput"
+                        class="block text-sm font-medium text-slate-700 mb-1"
+                    >
+                        K Factor:
+                    </label>
+            
+                    <input
+                        type="number"
+                        id="kFactorInput"
+                        value="1.8"
+                        min="0.1"
+                        max="5"
+                        step="0.1"
+                        class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm
+                               focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    >
+            
+                    <p class="text-xs text-slate-400 mt-1">
+                        Điều chỉnh phạm vi HSV. Giá trị mặc định: 1.8
+                    </p>
+            
+                </div>
+            
+            
+                <!-- Min Area -->
+                <div>
+            
+                    <label
+                        for="minAreaInput"
+                        class="block text-sm font-medium text-slate-700 mb-1"
+                    >
+                        Diện tích object tối thiểu:
+                    </label>
+            
+                    <input
+                        type="number"
+                        id="minAreaInput"
+                        value="2000"
+                        min="1"
+                        step="100"
+                        class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm
+                               focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    >
+            
+                    <p class="text-xs text-slate-400 mt-1">
+                        Object nhỏ hơn giá trị này sẽ bị bỏ qua.
+                    </p>
+            
+                </div>
+            
+            </div>
+
 
 
             <!-- Preview -->
@@ -52,6 +118,90 @@
             <h2 class="font-semibold text-lg mb-1">Kết quả nhận diện:</h2>
             <p id="fruitResult" class="text-2xl font-bold uppercase"></p>
             <p id="confidenceResult" class="text-sm mt-1"></p>
+        </div>
+
+        <!-- ====================================================== -->
+        <!-- BỔ SUNG: Kết quả xử lý HSV -->
+        <!-- ====================================================== -->
+        <div
+            id="hsvResultBox"
+            class="mt-6 hidden"
+        >
+            <h2 class="font-semibold text-lg mb-4 text-center text-slate-700">
+                Kết quả xử lý HSV
+            </h2>
+            <!-- Ảnh trước -->
+            <div class="mb-4">
+                <p class="text-sm font-semibold text-slate-600 mb-2">
+                    Ảnh trước xử lý:
+                </p>
+                <img
+                    id="beforeImage"
+                    src=""
+                    class="w-full rounded-lg border border-slate-200 shadow-sm"
+                >
+            </div>
+            <!-- Mask HSV -->
+            <div class="mb-4">
+        
+                <p class="text-sm font-semibold text-slate-600 mb-2">
+                    Mask HSV:
+                </p>
+        
+                <img
+                    id="maskImage"
+                    src=""
+                    class="w-full rounded-lg border border-slate-200 shadow-sm"
+                >
+            </div>
+            <!-- Ảnh sau -->
+            <div class="mb-4">
+                <p class="text-sm font-semibold text-slate-600 mb-2">
+                    Ảnh sau xử lý:
+                </p>
+                <img
+                    id="afterImage"
+                    src=""
+                    class="w-full rounded-lg border border-slate-200 shadow-sm"
+                >
+            </div>
+            <!-- Đánh giá -->
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <h3 class="font-semibold text-slate-700 mb-3">
+                    📊 Đánh giá kết quả
+                </h3>
+        
+                <div class="text-sm text-slate-600 space-y-1">
+                    <p>
+                        K Factor:
+                        <span
+                            id="kFactorResult"
+                            class="font-semibold"
+                        ></span>
+                    </p>
+                    <p>
+                        Min Area:
+                        <span
+                            id="minAreaResult"
+                            class="font-semibold"
+                        ></span>
+                    </p>
+                    <p>
+                        Số object phát hiện:
+                        <span
+                            id="objectCountResult"
+                            class="font-semibold"
+                        ></span>
+                    </p>
+                    <p>
+                        Tổng diện tích:
+                        <span
+                            id="totalAreaResult"
+                            class="font-semibold"
+                        ></span>
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Nơi hiển thị biểu đồ Color Histogram -->
@@ -76,6 +226,21 @@
         const histogramBox = document.getElementById('histogramBox');
         const histogramImage = document.getElementById('histogramImage');
 
+        // HSV
+        const kFactorInput = document.getElementById('kFactorInput');
+        const minAreaInput = document.getElementById('minAreaInput');
+        
+        const hsvResultBox = document.getElementById('hsvResultBox');
+        
+        const beforeImage = document.getElementById('beforeImage');
+        const maskImage = document.getElementById('maskImage');
+        const afterImage = document.getElementById('afterImage');
+        
+        const kFactorResult = document.getElementById('kFactorResult');
+        const minAreaResult = document.getElementById('minAreaResult');
+        const objectCountResult = document.getElementById('objectCountResult');
+        const totalAreaResult = document.getElementById('totalAreaResult');
+
         // Hiển thị ảnh xem trước khi người dùng chọn file
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -86,6 +251,7 @@
                     previewContainer.classList.remove('hidden');
                     resultBox.classList.add('hidden'); // Giấu kết quả cũ đi
                     histogramBox.classList.add('hidden');
+                    hsvResultBox.classList.add('hidden');
                 }
                 reader.readAsDataURL(file);
             }
@@ -103,8 +269,13 @@
             histogramBox.classList.add('hidden');
 
             const formData = new FormData();
+            // Histogram
             formData.append('file', file);
             formData.append('bins', binInput.value);
+
+            // HSV
+            formData.append('k_factor', kFactorInput.value);
+            formData.append('min_area', minAreaInput.value);
 
             try {
                 const response = await fetch('http://127.0.0.1:8000/analyze', {
@@ -128,6 +299,60 @@
                 if(data.histogram_b64) {
                     histogramImage.src = "data:image/png;base64," + data.histogram_b64;
                     histogramBox.classList.remove('hidden');
+                }
+
+                // ======================================================
+                // BỔ SUNG: HIỂN THỊ KẾT QUẢ HSV
+                // ======================================================
+                
+                if (
+                    data.before_image_b64 &&
+                    data.after_image_b64 &&
+                    data.mask_image_b64
+                ) {
+                
+                    beforeImage.src =
+                        "data:image/jpeg;base64,"
+                        + data.before_image_b64;
+                
+                
+                    maskImage.src =
+                        "data:image/png;base64,"
+                        + data.mask_image_b64;
+                
+                
+                    afterImage.src =
+                        "data:image/jpeg;base64,"
+                        + data.after_image_b64;
+                
+                
+                    // ==============================================
+                    // Hiển thị tham số
+                    // ==============================================
+                
+                    kFactorResult.textContent =
+                        data.hsv_params.k_factor;
+                
+                
+                    minAreaResult.textContent =
+                        data.hsv_params.min_area;
+                
+                
+                    // ==============================================
+                    // Đánh giá kết quả
+                    // ==============================================
+                
+                    objectCountResult.textContent =
+                        data.detected_count;
+                
+                
+                    totalAreaResult.textContent =
+                        data.total_area + " pixels";
+                
+                
+                    hsvResultBox.classList.remove(
+                        'hidden'
+                    );
                 }
             } catch (error) {
                 resultBox.classList.remove('hidden');
