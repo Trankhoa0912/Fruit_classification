@@ -9,17 +9,8 @@ import matplotlib
 matplotlib.use('Agg') # Cần thiết để vẽ biểu đồ ngầm trên server không có màn hình
 import matplotlib.pyplot as plt
 from fastapi import Form # Dùng để nhận tham số từ HTML form
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-# Cấp quyền cho cổng 5500 của Live Server
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Nạp thư mục chứa giao diện HTML
 templates = Jinja2Templates(directory="templates")
