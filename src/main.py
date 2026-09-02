@@ -41,6 +41,7 @@ def image_to_base64(image, ext=".jpg"):
 def generate_color_histogram(image_bgr, bins):
     bins = max(1, min(int(bins), 256))
     colors = ("b", "g", "r")
+    labels = ("Blue", "Green", "Red")
 
     plt.figure(figsize=(5, 3))
 
@@ -54,12 +55,13 @@ def generate_color_histogram(image_bgr, bins):
             [bins],
             [0, 256]
         )
-        plt.plot(x, hist.ravel(), color=color, linewidth=1.5)
+        plt.plot(x, hist.ravel(), color=color, linewidth=1.5, label=labels[i])
 
     plt.xlim([0, 255])
     plt.title("Color Histogram", fontsize=10)
     plt.xlabel("Pixel Intensity", fontsize=8)
     plt.ylabel("Number of Pixels", fontsize=8)
+    plt.legend()
     plt.tight_layout()
 
     buf = io.BytesIO()
