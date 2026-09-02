@@ -54,6 +54,37 @@
             <p id="confidenceResult" class="text-sm mt-1"></p>
         </div>
 
+        <!-- Bảng hiển thị các chỉ số thống kê ảnh -->
+        <div id="statsBox" class="mt-6 hidden p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="text-xs font-semibold uppercase text-slate-600 mb-3 tracking-wider">Chỉ Số Thống Kê Ảnh (Grayscale Stats)</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Độ sáng TB (Mean)</span>
+                    <span id="statMean" class="text-base font-bold text-slate-800">-</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Độ lệch chuẩn (Std)</span>
+                    <span id="statStd" class="text-base font-bold text-slate-800">-</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Phương sai (Var)</span>
+                    <span id="statVar" class="text-base font-bold text-slate-800">-</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Tối thiểu (Min)</span>
+                    <span id="statMin" class="text-base font-bold text-slate-800">-</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Tối đa (Max)</span>
+                    <span id="statMax" class="text-base font-bold text-slate-800">-</span>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="block text-xs text-slate-500 font-medium">Entropy</span>
+                    <span id="statEntropy" class="text-base font-bold text-blue-600">-</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Nơi hiển thị biểu đồ Color Histogram -->
         <div id="histogramBox" class="mt-6 hidden p-4 rounded-lg bg-white border border-slate-200 shadow-sm transition-all">
             <h2 class="font-semibold text-lg mb-2 text-center text-slate-700">Biểu đồ Color Histogram</h2>
@@ -76,6 +107,14 @@
         const histogramBox = document.getElementById('histogramBox');
         const histogramImage = document.getElementById('histogramImage');
 
+        const statsBox = document.getElementById('statsBox');
+        const statMean = document.getElementById('statMean');
+        const statStd = document.getElementById('statStd');
+        const statVar = document.getElementById('statVar');
+        const statMin = document.getElementById('statMin');
+        const statMax = document.getElementById('statMax');
+        const statEntropy = document.getElementById('statEntropy');
+
         // Hiển thị ảnh xem trước khi người dùng chọn file
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -86,6 +125,7 @@
                     previewContainer.classList.remove('hidden');
                     resultBox.classList.add('hidden'); // Giấu kết quả cũ đi
                     histogramBox.classList.add('hidden');
+                    statsBox.classList.add('hidden');
                 }
                 reader.readAsDataURL(file);
             }
@@ -101,6 +141,7 @@
             submitBtn.disabled = true;
             resultBox.classList.add('hidden');
             histogramBox.classList.add('hidden');
+            statsBox.classList.add('hidden');
 
             const formData = new FormData();
             formData.append('file', file);
@@ -123,6 +164,17 @@
                     resultBox.className = "mt-6 p-4 rounded-lg text-center bg-green-50 text-green-700 border border-green-200";
                     fruitResult.textContent = data.prediction;
                     confidenceResult.textContent = "Độ tự tin: " + data.confidence;
+                        // Hiển thị và gán dữ liệu thống kê
+                    if (data.stats) {
+                        statMean.textContent = data.stats.mean;
+                        statStd.textContent = data.stats.std;
+                        statVar.textContent = data.stats.variance;
+                        statMin.textContent = data.stats.min;
+                        statMax.textContent = data.stats.max;
+                        statEntropy.textContent = data.stats.entropy;
+                    
+                        statsBox.classList.remove('hidden');
+                    }
                     
                 }
                 if(data.histogram_b64) {

@@ -10,6 +10,7 @@ matplotlib.use('Agg') # Cần thiết để vẽ biểu đồ ngầm trên serve
 import matplotlib.pyplot as plt
 from fastapi import Form # Dùng để nhận tham số từ HTML form
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
 app = FastAPI()
 # Cấp quyền cho cổng 5500 của Live Server
@@ -22,7 +23,11 @@ app.add_middleware(
 )
 
 # Nạp thư mục chứa giao diện HTML
-templates = Jinja2Templates(directory="templates")
+#templates = Jinja2Templates(directory="templates")
+
+# Lấy đường dẫn thư mục templates nằm cùng cấp với file main.py trong src
+BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Color Histogram
 def generate_color_histogram(image_bgr, bins):
