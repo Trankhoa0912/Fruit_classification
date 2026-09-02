@@ -392,6 +392,18 @@ def process_statistical(
         detected_fruits
     )
 
+# =========================================================
+# BỔ SUNG: Chuyển ảnh OpenCV thành Base64 để gửi về giao diện
+# =========================================================
+def image_to_base64(image, ext=".jpg"):
+    success, buffer = cv2.imencode(ext, image)
+
+    if not success:
+        return None
+
+    return base64.b64encode(buffer).decode("utf-8")
+    
+
 @app.get("/", response_class=HTMLResponse)
 async def home_page(request: Request):
     """Render trang chủ giao diện web"""
@@ -407,6 +419,10 @@ async def home_page(request: Request):
 async def analyze_image(
     file: UploadFile = File(...),
     bins: int = Form(256) # <-- MỚI: Nhận tham số bins từ giao diện HTML
+
+    # HSV
+    k_factor: float = Form(1.8),
+    min_area: int = Form(2000)
 ):
     """API Nhận ảnh từ giao diện, phân tích và trả về kết quả"""
 
@@ -450,12 +466,29 @@ async def analyze_image(
         ) = process_statistical(
             image_bgr=img_resized,
             sample_bbox=None,
-            k_factor=1.8,
-            min_area=2000
+            k_factor=k_factor,
+            min_area=min_area
         )
 
         # <-- MỚI: Gọi hàm vẽ Color Histogram ở đây -->
         histogram_b64 = generate_color_histogram(img_resized, bins)
+
+        # =========================================================
+        # BỔ SUNG: Ảnh trước / Mask HSV / Ảnh sau
+        # =========================================================
+        
+        before_image_b64 = image_to_base64(
+            img_resized
+        )
+        
+        mask_image_b64 = image_to_base64(
+            mask_clean,
+            ".png"
+        )
+        
+        after_image_b64 = image_to_base64(
+            result_img
+        )
 
         if detected_fruits:
             best_fruit = max(
@@ -479,6 +512,15 @@ async def analyze_image(
             "stats": stats,
             "objects": detected_fruits,
             "histogram_b64": histogram_b64 # <-- MỚI: Trả về thêm chuỗi biểu đồ
+
+            "before_image_b64": before_image_b64,
+            "mask_image_b64": mask_image_b64,
+            "after_image_b64": after_image_b64,
+        
+            "hsv_params": {
+                "k_factor": k_factor,
+                "min_area": min_area
+            }
         }
         
     except Exception as e:
