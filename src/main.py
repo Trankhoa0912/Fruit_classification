@@ -349,29 +349,19 @@ def process_statistical(
 
     mean_val = round(float(np.mean(gray)), 2)
     std_val = round(float(np.std(gray)), 2)
-    var_val = round(float(np.var(gray)), 2)
-    min_val = int(np.min(gray))
-    max_val = int(np.max(gray))
-    entropy_val = round(entropy, 2)
-    # Tính ngưỡng theo mean và std
     t_val = float(np.clip(mean_val + stat_k * std_val, 0, 255))
     stats = {
-        "mean": mean_val,
-        "std": std_val,
-        "variance": var_val,
-        "min": min_val,
-        "max": max_val,
-        "entropy": entropy_val,
+        "mean": round(float(np.mean(gray)), 2),
+        "std": round(float(np.std(gray)), 2),
+        "variance": round(float(np.var(gray)), 2),
+        "min": int(np.min(gray)),
+        "max": int(np.max(gray)),
+        "entropy": round(entropy, 2),
         "threshold": round(t_val, 2),
     }
-    # Phân ngưỡng nhị phân
     _, binary_stat = cv2.threshold(gray, t_val, 255, cv2.THRESH_BINARY)
-
-    _, buf_gray = cv2.imencode(".png", gray)
-    stat_gray_b64 = base64.b64encode(buf_gray).decode("utf-8")
-
-    _, buf_bin = cv2.imencode(".png", binary_stat)
-    stat_bin_b64 = base64.b64encode(buf_bin).decode("utf-8")
+    stat_gray_b64 = image_to_base64(gray, ".png")
+    stat_bin_b64 = image_to_base64(binary_stat, ".png")
 
     hsv_info = {
         "mean_h": round(float(mean_hsv[0]), 2),
@@ -514,6 +504,8 @@ async def analyze_image(
 
             "before_image_b64": before_image_b64,
             "hsv_image_b64": hsv_image_b64,
+            "stat_gray_b64": stat_gray_b64,
+            "stat_bin_b64": stat_bin_b64,
 
             "hsv_params": {
                 "k_factor": k_factor,
@@ -530,9 +522,6 @@ async def analyze_image(
                 "lower": hsv_info["lower"],
                 "upper": hsv_info["upper"],
             },
-            "before_image_b64": before_image_b64,
-            "hsv_image_b64": hsv_image_b64,
-            "stat_bin_b64": stat_bin_b64,
         }
 
     except Exception as e:
