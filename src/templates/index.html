@@ -7,7 +7,6 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Hệ Thống Phân Loại Trái Cây</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +22,7 @@
             </h1>
 
             <p class="text-slate-500 mt-2">
-                Xử lý ảnh bằng HSV và Color Histogram
+                Xử lý ảnh bằng HSV và Color Histogram & Thống kê mức xám   
             </p>
         </div>
 
@@ -275,6 +274,18 @@
                     </div>
                 </details>
 
+                <!-- Khối tham số thống kê -->
+                <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4">
+                    <h3 class="font-semibold text-slate-800 mb-1">📈 Tham số Thống kê (Phân ngưỡng)</h3>
+                    <p class="text-xs text-slate-500 mb-3">Điều chỉnh hệ số k để tính ngưỡng: T = Mean + k × Std</p>
+                    <div class="flex items-center gap-3">
+                        <label for="statKInput" class="text-sm font-medium text-slate-700">Hệ số k:</label>
+                        <input type="number" id="statKInput" value="0.0" min="-3.0" max="3.0" step="0.1"
+                            class="w-32 border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-sm">
+                        <span class="text-xs text-slate-500">(Mặc định: 0.0)</span>
+                    </div>
+                </div>
+
                 <button
                     type="submit"
                     id="submitBtn"
@@ -343,57 +354,29 @@
                     🎨 Kết quả xử lý HSV
                 </h2>
 
-                <div
-                    class="
-                        grid
-                        md:grid-cols-2
-                        gap-5
-                    "
-                >
-                    <div>
-                        <h3
-                            class="
-                                text-center
-                                font-semibold
-                                text-slate-700
-                                mb-2
-                            "
-                        >
-                            1. Ảnh ban đầu
-                        </h3>
-
-                        <div class="bg-slate-100 rounded-xl p-2">
-                            <img
-                                id="beforeImage"
-                                src=""
-                                class="w-full rounded-lg"
-                                alt="Ảnh ban đầu"
-                            >
+                    <div style="display: flex; gap: 16px; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 16px;">
+                                
+                    <div style="flex: 1; min-width: 0; text-align: center;">
+                        <h4 style="font-weight: 600; color: #334155; font-size: 14px; margin-bottom: 8px;">1. Ảnh ban đầu</h4>
+                        <div style="background-color: #f1f5f9; border-radius: 12px; padding: 8px; border: 1px solid #e2e8f0;">
+                            <img id="beforeImage" src="" alt="Ảnh ban đầu" style="width: 100%; height: 220px; object-fit: contain; border-radius: 8px; display: block;">
                         </div>
                     </div>
-
-                    <div>
-                        <h3
-                            class="
-                                text-center
-                                font-semibold
-                                text-slate-700
-                                mb-2
-                            "
-                        >
-                            2. Ảnh HSV
-                        </h3>
-
-                        <div class="bg-slate-100 rounded-xl p-2">
-                            <img
-                                id="hsvImage"
-                                src=""
-                                class="w-full rounded-lg"
-                                alt="Ảnh HSV"
-                            >
+                
+                    <div style="flex: 1; min-width: 0; text-align: center;">
+                        <h4 style="font-weight: 600; color: #334155; font-size: 14px; margin-bottom: 8px;">2. Ảnh HSV</h4>
+                        <div style="background-color: #f1f5f9; border-radius: 12px; padding: 8px; border: 1px solid #e2e8f0;">
+                            <img id="hsvImage" src="" alt="Ảnh HSV" style="width: 100%; height: 220px; object-fit: contain; border-radius: 8px; display: block;">
                         </div>
                     </div>
-
+                
+                    <div style="flex: 1; min-width: 0; text-align: center;">
+                        <h4 style="font-weight: 600; color: #334155; font-size: 14px; margin-bottom: 8px;">3. Ảnh nhị phân</h4>
+                        <div style="background-color: #f1f5f9; border-radius: 12px; padding: 8px; border: 1px solid #e2e8f0;">
+                            <img id="img-stat-bin" src="" alt="Ảnh phân ngưỡng thống kê" style="width: 100%; height: 220px; object-fit: contain; border-radius: 8px; display: block;">
+                        </div>
+                    </div>
+                
                 </div>
 
                 <div class="mt-8">
@@ -566,6 +549,28 @@
                 "
             >
         </div>
+
+        <!--Hiển thị ảnh Trước / Sau của Thống kê -->
+        <div id="statBoxResult" class="hidden mt-8 bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">📈 Kết quả xử lý Thống Kê (Ảnh Trước / Sau)</h2>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <h3 class="text-center font-semibold text-slate-700 mb-2">1. Ảnh trước (Grayscale)</h3>
+                    <div class="bg-slate-100 rounded-xl p-2">
+                        <img id="statGrayImg" src="" class="w-full rounded-lg" alt="Ảnh xám">
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-center font-semibold text-slate-700 mb-2">2. Ảnh sau (Nhị phân theo ngưỡng T)</h3>
+                    <div class="bg-slate-100 rounded-xl p-2">
+                        <img id="statBinaryImg" src="" class="w-full rounded-lg" alt="Ảnh sau phân ngưỡng">
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mt-3 text-sm text-slate-600">
+                Ngưỡng thống kê áp dụng: <b id="statThresholdVal" class="text-amber-600">-</b>
+            </p>
+        </div>
     </div>
 
     <script>
@@ -586,6 +591,7 @@
         const hsvResultBox = document.getElementById("hsvResultBox");
         const beforeImage = document.getElementById("beforeImage");
         const hsvImage = document.getElementById("hsvImage");
+        const imgStatBin = document.getElementById("img-stat-bin");
 
         const kFactorResult = document.getElementById("kFactorResult");
         const objectCountResult = document.getElementById("objectCountResult");
@@ -598,6 +604,12 @@
         const minResult = document.getElementById("minResult");
         const maxResult = document.getElementById("maxResult");
         const entropyResult = document.getElementById("entropyResult");
+
+        const statKInput = document.getElementById("statKInput");
+        const statBoxResult = document.getElementById("statBoxResult");
+        const statGrayImg = document.getElementById("statGrayImg");
+        const statBinaryImg = document.getElementById("statBinaryImg");
+        const statThresholdVal = document.getElementById("statThresholdVal");
 
         const histogramBox = document.getElementById("histogramBox");
         const histogramImage = document.getElementById("histogramImage");
@@ -639,6 +651,7 @@
             formData.append("bins", binInput.value);
             formData.append("k_factor", kFactorInput.value);
             formData.append("min_area", minAreaInput.value);
+            formData.append("stat_k", statKInput ? statKInput.value : 0.0);
 
             try {
                 const API_URL =
@@ -677,6 +690,9 @@
                 if (data.hsv_image_b64) {
                     hsvImage.src = "data:image/jpeg;base64," + data.hsv_image_b64;
                 }
+                if (data.stat_bin_b64) {
+                    imgStatBin.src = "data:image/png;base64," + data.stat_bin_b64;
+                }
 
                 if (data.hsv_params) {
                     kFactorResult.textContent = data.hsv_params.k_factor;
@@ -702,7 +718,10 @@
                     maxResult.textContent = data.stats.max;
                     entropyResult.textContent = data.stats.entropy;
                 }
-
+                if (data.stat_bin_b64 && imgStatBin) {
+                imgStatBin.src = "data:image/png;base64," + data.stat_bin_b64;
+}
+                
                 hsvResultBox.classList.remove("hidden");
 
                 if (data.histogram_b64) {
