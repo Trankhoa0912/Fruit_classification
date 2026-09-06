@@ -353,14 +353,20 @@
                             2. Ảnh HSV
                         </h3>
 
+                        
                         <div class="bg-slate-100 rounded-xl p-2">
                             <img
-                                id="hsvImage"
-                                src=""
-                                class="w-full rounded-lg"
-                                alt="Ảnh HSV"
+                            id="hsvImage"
+                            src=""
+                            class="w-full rounded-lg"
+                            alt="Ảnh HSV"
                             >
                         </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <a id="downloadHsvBtn" download="anh_hsv_tach_nen.jpg" class="hidden inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 px-4 rounded-lg text-sm transition cursor-pointer">
+                            💾 Tải Ảnh HSV
+                        </a>
                     </div>
 
                 </div>
@@ -402,6 +408,12 @@
                                 <div class="bg-slate-100 rounded-xl p-2">
                                     <img id="statBinaryImg" src="" class="w-full h-64 object-contain rounded-lg" alt="Ảnh sau nhị phân">
                                 </div>
+                                <!-- Thêm nút tải cho Ảnh Nhị phân -->
+                                <div class="mt-3 text-center">
+                                    <a id="downloadBinaryBtn" download="anh_nhi_phan_thong_ke.png" class="hidden inline-block bg-amber-600 hover:bg-amber-700 text-white font-semibold py-1.5 px-4 rounded-lg text-sm transition cursor-pointer">
+                                        💾 Tải Ảnh Nhị Phân
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-3 text-center bg-amber-50 border border-amber-200 rounded-lg py-2">
@@ -414,11 +426,11 @@
             </div>
         </div>
 
-        <div class="mt-6 flex justify-center">
+        <!-- <div class="mt-6 flex justify-center">
             <a id="downloadBtn" download="ket_qua_xu_ly.jpg" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-xl transition cursor-pointer">
                 💾 Tải Ảnh Đã Tách Nền (HSV) Về Máy
             </a>
-        </div>
+        </div> -->
 
         <div id="histogramBox" class="mt-8 hidden bg-white rounded-2xl shadow-lg p-6">
             <h2 class="text-xl font-bold text-slate-800 mb-6">📊 Kết quả Cân bằng Histogram</h2>
@@ -438,7 +450,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="grid md:grid-cols-2 gap-5">
                 <!-- Cột 1: Trước khi cân bằng -->
                 <div>
@@ -453,8 +465,14 @@
                     <h3 class="text-center font-semibold text-slate-700 mb-2">2. Ảnh đã cân bằng sáng & Biểu đồ</h3>
                     <div class="bg-slate-100 rounded-xl p-2 flex flex-col gap-2">
                         <img id="histEqImg" src="" class="w-full rounded-lg border border-slate-200" alt="Ảnh Cân bằng Histogram">
+                        <!-- Thêm nút tải cho Ảnh Cân bằng sáng -->
+                        <div class="text-center">
+                            <a id="downloadHistEqBtn" download="anh_can_bang_sang.jpg" class="hidden inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-1.5 px-4 rounded-lg text-sm transition cursor-pointer">
+                                💾 Tải Ảnh Cân Bằng Sáng
+                            </a>
+                        </div>
                         <img id="histAfterImg" src="" class="w-full rounded-lg" alt="Histogram Sau">
-                    </div>
+                    </div>x 
                 </div>
             </div>
         </div>
@@ -579,12 +597,12 @@
                 }
                 if (data.segmented_b64) {
                     hsvImage.src = "data:image/jpeg;base64," + data.segmented_b64;
-                    // Kích hoạt nút Tải về
-                    const downloadBtn = document.getElementById("downloadBtn");
-                    downloadBtn.href = "data:image/jpeg;base64," + data.segmented_b64;
-                    downloadBtn.classList.remove("hidden");
+                    
+                    // Kích hoạt nút tải ảnh HSV
+                    const downloadHsvBtn = document.getElementById("downloadHsvBtn");
+                    downloadHsvBtn.href = "data:image/jpeg;base64," + data.segmented_b64;
+                    downloadHsvBtn.classList.remove("hidden");
                 }
-
 
                 // 4. Gắn ảnh Thống kê (Phân ngưỡng)
                 if (data.stat_gray_b64) {
@@ -592,30 +610,11 @@
                 }
                 if (data.stat_bin_b64) {
                     statBinaryImg.src = "data:image/png;base64," + data.stat_bin_b64;
-                }
-                
-                // Cập nhật Đánh giá HSV
-                document.getElementById("hsvRatioResult").textContent = data.hsv_ratio;
-
-                // Cập nhật Đánh giá Histogram
-                document.getElementById("contrastBeforeResult").textContent = data.contrast_before;
-                document.getElementById("contrastAfterResult").textContent = data.contrast_after;
-                // Lấy thông số từ thanh trượt để in ra báo cáo HSV
-                const hMinVal = document.getElementById("hMin").value;
-                const sMinVal = document.getElementById("sMin").value;
-                const vMinVal = document.getElementById("vMin").value;
-                const hMaxVal = document.getElementById("hMax").value;
-                const sMaxVal = document.getElementById("sMax").value;
-                const vMaxVal = document.getElementById("vMax").value;
-                
-                document.getElementById("hsvRangeApplied").textContent = 
-                    `LOWER: (${hMinVal}, ${sMinVal}, ${vMinVal}) ➔ UPPER: (${hMaxVal}, ${sMaxVal}, ${vMaxVal})`;
-                
-                // Cập nhật các chỉ số thống kê
-                if (data.stats) {
-                    meanResult.textContent = data.stats.mean;
-                    stdResult.textContent = data.stats.std;
-                    statThresholdVal.textContent = data.stats.threshold;                   
+                    
+                    // Kích hoạt nút tải ảnh Nhị phân
+                    const downloadBinaryBtn = document.getElementById("downloadBinaryBtn");
+                    downloadBinaryBtn.href = "data:image/png;base64," + data.stat_bin_b64;
+                    downloadBinaryBtn.classList.remove("hidden");
                 }
 
                 // 5. Gắn ảnh Histogram (Cân bằng sáng)
@@ -627,6 +626,11 @@
                 }
                 if (data.hist_eq_b64) {
                     document.getElementById("histEqImg").src = "data:image/jpeg;base64," + data.hist_eq_b64;
+                    
+                    // Kích hoạt nút tải ảnh Cân bằng sáng
+                    const downloadHistEqBtn = document.getElementById("downloadHistEqBtn");
+                    downloadHistEqBtn.href = "data:image/jpeg;base64," + data.hist_eq_b64;
+                    downloadHistEqBtn.classList.remove("hidden");
                 }
 
             } catch (error) {
