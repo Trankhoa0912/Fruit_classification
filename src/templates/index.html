@@ -137,75 +137,33 @@
                             "
                         >
                     </div>
-
-                    <div
-                        class="
-                            bg-blue-50
-                            border
-                            border-blue-200
-                            rounded-xl
-                            p-5
-                        "
-                    >
-                        <h3 class="font-semibold text-slate-800 mb-1">
-                            🎨 Tham số HSV
-                        </h3>
-
-                        <p class="text-xs text-slate-500 mb-4">
-                            Điều chỉnh độ rộng vùng màu được chấp nhận.
-                        </p>
-
-                        <label
-                            for="kFactorInput"
-                            class="
-                                block
-                                text-sm
-                                font-medium
-                                text-slate-700
-                                mb-1
-                            "
-                        >
-                            K Factor
-                        </label>
-
-                        <input
-                            type="number"
-                            id="kFactorInput"
-                            value="1.8"
-                            min="0.1"
-                            max="5"
-                            step="0.1"
-                            class="
-                                w-full
-                                border
-                                border-slate-300
-                                rounded-lg
-                                px-3
-                                py-2
-                                focus:outline-none
-                                focus:border-blue-500
-                                focus:ring-1
-                                focus:ring-blue-500
-                            "
-                        >
-
-                        <div
-                            class="
-                                mt-3
-                                text-xs
-                                text-slate-600
-                                bg-white
-                                rounded-lg
-                                p-3
-                                border
-                                border-blue-100
-                            "
-                        >
-                            <b>K nhỏ:</b> chọn màu chặt hơn.
-                            <br>
-                            <b>K lớn:</b> chấp nhận nhiều biến thiên màu hơn.
-                            <br>
-                            <b>Mặc định:</b> 1.8
+                                    
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-800 mb-3">🎨 Tham số HSV</h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm font-medium text-slate-700">
+                        <div>
+                            <label>H Min: <span id="valHMin">0</span></label>
+                            <input type="range" id="hMin" min="0" max="179" value="0" class="w-full" oninput="document.getElementById('valHMin').innerText = this.value">
+                        </div>
+                        <div>
+                            <label>H Max: <span id="valHMax">179</span></label>
+                            <input type="range" id="hMax" min="0" max="179" value="179" class="w-full" oninput="document.getElementById('valHMax').innerText = this.value">
+                        </div>
+                        <div>
+                            <label>S Min: <span id="valSMin">0</span></label>
+                            <input type="range" id="sMin" min="0" max="255" value="0" class="w-full" oninput="document.getElementById('valSMin').innerText = this.value">
+                        </div>
+                        <div>
+                            <label>S Max: <span id="valSMax">255</span></label>
+                            <input type="range" id="sMax" min="0" max="255" value="255" class="w-full" oninput="document.getElementById('valSMax').innerText = this.value">
+                        </div>
+                        <div>
+                            <label>V Min: <span id="valVMin">0</span></label>
+                            <input type="range" id="vMin" min="0" max="255" value="0" class="w-full" oninput="document.getElementById('valVMin').innerText = this.value">
+                        </div>
+                        <div>
+                            <label>V Max: <span id="valVMax">255</span></label>
+                            <input type="range" id="vMax" min="0" max="255" value="255" class="w-full" oninput="document.getElementById('valVMax').innerText = this.value">
                         </div>
                     </div>
                 </div>
@@ -408,135 +366,24 @@
                 </div>
 
                 <div class="mt-8">
-                    <h3
-                        class="
-                            font-semibold
-                            text-slate-800
-                            mb-4
-                        "
-                    >
-                        📋 Đánh giá kết quả
-                    </h3>
+                    <h3 class="font-semibold text-slate-800 mb-4">📋 Đánh giá kết quả</h3>
 
-                    <div
-                        class="
-                            grid
-                            sm:grid-cols-2
-                            lg:grid-cols-4
-                            gap-4
-                        "
-                    >
-                        <div
-                            class="
-                                bg-blue-50
-                                border
-                                border-blue-100
-                                rounded-xl
-                                p-4
-                            "
-                        >
-                            <p class="text-xs text-slate-500">
-                                K Factor
-                            </p>
-
-                            <p
-                                id="kFactorResult"
-                                class="text-xl font-bold text-blue-600"
-                            ></p>
+                   <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                            <p class="text-xs text-slate-500">Ngưỡng HSV đã áp dụng để tách nền</p>
+                            <p id="hsvRangeApplied" class="font-semibold text-slate-700 text-lg mt-1">-</p>
                         </div>
-
-                        <div
-                            class="
-                                bg-green-50
-                                border
-                                border-green-100
-                                rounded-xl
-                                p-4
-                            "
-                        >
-                            <p class="text-xs text-slate-500">
-                                Vật thể phát hiện
-                            </p>
-
-                            <p
-                                id="objectCountResult"
-                                class="text-xl font-bold text-green-600"
-                            ></p>
-                        </div>
-
-                        <div
-                            class="
-                                bg-slate-50
-                                border
-                                border-slate-200
-                                rounded-xl
-                                p-4
-                            "
-                        >
-                            <p class="text-xs text-slate-500">
-                                HSV Lower
-                            </p>
-
-                            <p
-                                id="hsvLowerResult"
-                                class="font-semibold text-slate-700"
-                            >
-                                -
-                            </p>
-                        </div>
-
-                        <div
-                            class="
-                                bg-slate-50
-                                border
-                                border-slate-200
-                                rounded-xl
-                                p-4
-                            "
-                        >
-                            <p class="text-xs text-slate-500">
-                                HSV Upper
-                            </p>
-
-                            <p
-                                id="hsvUpperResult"
-                                class="font-semibold text-slate-700"
-                            >
-                                -
-                            </p>
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                            <p class="text-xs text-slate-500">Tỷ lệ diện tích vật thể giữ lại</p>
+                            <p class="font-bold text-emerald-600 text-xl mt-1"><span id="hsvRatioResult">-</span>%</p>
                         </div>
                     </div>
 
-                    <div
-                        id="statsBox"
-                        class="
-                            mt-5
-                            bg-slate-50
-                            border
-                            border-slate-200
-                            rounded-xl
-                            p-4
-                        "
-                    >
-                        <p class="font-semibold text-slate-700 mb-3">
-                            Thống kê ảnh
-                        </p>
-
-                        <div
-                            class="
-                                grid
-                                grid-cols-2
-                                md:grid-cols-3
-                                gap-3
-                                text-sm
-                            "
-                        >
-                            <p>Mean: <b id="meanResult">-</b></p>
-                            <p>Std: <b id="stdResult">-</b></p>
-                            <p>Variance: <b id="varianceResult">-</b></p>
-                            <p>Min: <b id="minResult">-</b></p>
-                            <p>Max: <b id="maxResult">-</b></p>
-                            <p>Entropy: <b id="entropyResult">-</b></p>
+                    <div id="statsBox" class="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <p class="font-semibold text-slate-700 mb-3">Thống kê ảnh (Mức xám)</p>
+                        <div class="flex gap-8 text-sm">
+                            <p>Mean (Trung bình): <b id="meanResult" class="text-blue-600">-</b></p>
+                            <p>Std (Độ lệch chuẩn): <b id="stdResult" class="text-blue-600">-</b></p>
                         </div>
                     </div>
 
@@ -567,39 +414,49 @@
             </div>
         </div>
 
-        <div
-            id="histogramBox"
-            class="
-                mt-8
-                hidden
-                bg-white
-                rounded-2xl
-                shadow-lg
-                p-6
-            "
-        >
-            <h2
-                class="
-                    text-xl
-                    font-bold
-                    text-slate-800
-                    mb-4
-                "
-            >
-                📊 Color Histogram
-            </h2>
+        <div class="mt-6 flex justify-center">
+            <a id="downloadBtn" download="ket_qua_xu_ly.jpg" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-xl transition cursor-pointer">
+                💾 Tải Ảnh Đã Tách Nền (HSV) Về Máy
+            </a>
+        </div>
 
-            <img
-                id="histogramImage"
-                src=""
-                alt="Color Histogram"
-                class="
-                    w-full
-                    max-w-3xl
-                    mx-auto
-                    rounded-xl
-                "
-            >
+        <div id="histogramBox" class="mt-8 hidden bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-6">📊 Kết quả Cân bằng Histogram</h2>
+            
+            <!-- Khung đánh giá Độ tương phản -->
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-5">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">Đánh giá Độ tương phản (Std - &sigma;):</p>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Công thức: <b>&sigma; = &radic;<span class="border-t border-slate-400 border-black/30 pb-0.5">&Sigma;(x - &mu;)&sup2; / N</span></b>
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-slate-700">Ảnh gốc: <b id="contrastBeforeResult" class="text-slate-900">-</b></p>
+                        <p class="text-sm text-slate-700 mt-1">Cân bằng sáng: <b id="contrastAfterResult" class="text-purple-700 text-lg">-</b></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-5">
+                <!-- Cột 1: Trước khi cân bằng -->
+                <div>
+                    <h3 class="text-center font-semibold text-slate-700 mb-2">1. Biểu đồ ảnh gốc</h3>
+                    <div class="bg-slate-100 rounded-xl p-2">
+                        <img id="histBeforeImg" src="" class="w-full rounded-lg" alt="Histogram Trước">
+                    </div>
+                </div>
+
+                <!-- Cột 2: Sau khi cân bằng -->
+                <div>
+                    <h3 class="text-center font-semibold text-slate-700 mb-2">2. Ảnh đã cân bằng sáng & Biểu đồ</h3>
+                    <div class="bg-slate-100 rounded-xl p-2 flex flex-col gap-2">
+                        <img id="histEqImg" src="" class="w-full rounded-lg border border-slate-200" alt="Ảnh Cân bằng Histogram">
+                        <img id="histAfterImg" src="" class="w-full rounded-lg" alt="Histogram Sau">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -642,6 +499,8 @@
         const histogramBox = document.getElementById("histogramBox");
         const histogramImage = document.getElementById("histogramImage");
 
+
+
         imageInput.addEventListener("change", function (e) {
             const file = e.target.files[0];
 
@@ -677,15 +536,18 @@
             const formData = new FormData();
             formData.append("file", file);
             formData.append("bins", binInput.value);
-            formData.append("k_factor", kFactorInput.value);
+            formData.append("h_min", document.getElementById("hMin").value);
+            formData.append("h_max", document.getElementById("hMax").value);
+            formData.append("s_min", document.getElementById("sMin").value);
+            formData.append("s_max", document.getElementById("sMax").value);
+            formData.append("v_min", document.getElementById("vMin").value);
+            formData.append("v_max", document.getElementById("vMax").value);
             formData.append("min_area", minAreaInput.value);
             formData.append("stat_k", statKInput ? statKInput.value : 0.0);
+            
 
             try {
-                const API_URL =
-                    window.location.port === "5500"
-                        ? "http://127.0.0.1:8000/analyze"
-                        : "/analyze";
+                const API_URL = window.location.port === "5500"? "http://127.0.0.1:8000/analyze": "/analyze";
 
                 const response = await fetch(API_URL, {
                     method: "POST",
@@ -699,77 +561,81 @@
                 const data = await response.json();
 
                 if (data.error) {
-                    resultBox.classList.remove("hidden");
-                    fruitResult.textContent = "Lỗi xử lý";
-                    confidenceResult.textContent = data.error;
-                    fruitResult.className = "text-2xl font-bold text-red-600 mt-1";
+                    alert("Lỗi xử lý: " + data.error);
                     return;
                 }
 
-                resultBox.classList.remove("hidden");
-                fruitResult.className = "text-3xl font-bold uppercase text-green-600 mt-1";
-                fruitResult.textContent = data.prediction;
-                confidenceResult.textContent = "Độ tự tin: " + data.confidence;
+                // 1. Ẩn hộp kết quả nhận diện trái cây cũ (vì ta đã đổi thành công cụ xử lý ảnh)
+                resultBox.classList.add("hidden"); 
 
+                // 2. Hiển thị khu vực kết quả HSV và Histogram
+                hsvResultBox.classList.remove("hidden");
+                histogramBox.classList.remove("hidden");
+                statBoxResult.classList.remove("hidden");
+
+                // 3. Gắn ảnh HSV (Tách vật thể)
                 if (data.before_image_b64) {
                     beforeImage.src = "data:image/jpeg;base64," + data.before_image_b64;
                 }
-
-                if (data.hsv_image_b64) {
-                    hsvImage.src = "data:image/jpeg;base64," + data.hsv_image_b64;
+                if (data.segmented_b64) {
+                    hsvImage.src = "data:image/jpeg;base64," + data.segmented_b64;
+                    // Kích hoạt nút Tải về
+                    const downloadBtn = document.getElementById("downloadBtn");
+                    downloadBtn.href = "data:image/jpeg;base64," + data.segmented_b64;
+                    downloadBtn.classList.remove("hidden");
                 }
 
-                if (data.hsv_params) {
-                    kFactorResult.textContent = data.hsv_params.k_factor;
 
-                    if (data.hsv_params.lower) {
-                        hsvLowerResult.textContent =
-                            "(" + data.hsv_params.lower.join(", ") + ")";
-                    }
-
-                    if (data.hsv_params.upper) {
-                        hsvUpperResult.textContent =
-                            "(" + data.hsv_params.upper.join(", ") + ")";
-                    }
-                }
-
-                objectCountResult.textContent = data.detected_count;
-
-                if (data.stats) {
-                    meanResult.textContent = data.stats.mean;
-                    stdResult.textContent = data.stats.std;
-                    varianceResult.textContent = data.stats.variance;
-                    minResult.textContent = data.stats.min;
-                    maxResult.textContent = data.stats.max;
-                    entropyResult.textContent = data.stats.entropy;
-                    statThresholdVal.textContent = data.stats.threshold;
-                }
+                // 4. Gắn ảnh Thống kê (Phân ngưỡng)
                 if (data.stat_gray_b64) {
                     statGrayImg.src = "data:image/png;base64," + data.stat_gray_b64;
                 }
                 if (data.stat_bin_b64) {
                     statBinaryImg.src = "data:image/png;base64," + data.stat_bin_b64;
                 }
-                statBoxResult.classList.remove("hidden");
+                
+                // Cập nhật Đánh giá HSV
+                document.getElementById("hsvRatioResult").textContent = data.hsv_ratio;
 
-                hsvResultBox.classList.remove("hidden");
+                // Cập nhật Đánh giá Histogram
+                document.getElementById("contrastBeforeResult").textContent = data.contrast_before;
+                document.getElementById("contrastAfterResult").textContent = data.contrast_after;
+                // Lấy thông số từ thanh trượt để in ra báo cáo HSV
+                const hMinVal = document.getElementById("hMin").value;
+                const sMinVal = document.getElementById("sMin").value;
+                const vMinVal = document.getElementById("vMin").value;
+                const hMaxVal = document.getElementById("hMax").value;
+                const sMaxVal = document.getElementById("sMax").value;
+                const vMaxVal = document.getElementById("vMax").value;
+                
+                document.getElementById("hsvRangeApplied").textContent = 
+                    `LOWER: (${hMinVal}, ${sMinVal}, ${vMinVal}) ➔ UPPER: (${hMaxVal}, ${sMaxVal}, ${vMaxVal})`;
+                
+                // Cập nhật các chỉ số thống kê
+                if (data.stats) {
+                    meanResult.textContent = data.stats.mean;
+                    stdResult.textContent = data.stats.std;
+                    statThresholdVal.textContent = data.stats.threshold;                   
+                }
 
-                if (data.histogram_b64) {
-                    histogramImage.src = "data:image/png;base64," + data.histogram_b64;
-                    histogramBox.classList.remove("hidden");
+                // 5. Gắn ảnh Histogram (Cân bằng sáng)
+                if (data.hist_before_b64) {
+                    document.getElementById("histBeforeImg").src = "data:image/png;base64," + data.hist_before_b64;
+                }
+                if (data.hist_after_b64) {
+                    document.getElementById("histAfterImg").src = "data:image/png;base64," + data.hist_after_b64;
+                }
+                if (data.hist_eq_b64) {
+                    document.getElementById("histEqImg").src = "data:image/jpeg;base64," + data.hist_eq_b64;
                 }
 
             } catch (error) {
                 console.error(error);
-
-                resultBox.classList.remove("hidden");
-                fruitResult.className = "text-2xl font-bold text-red-600 mt-1";
-                fruitResult.textContent = "Mất kết nối";
-                confidenceResult.textContent = "Không thể kết nối với FastAPI server.";
+                alert("Mất kết nối: Không thể kết nối với FastAPI server.");
             } finally {
                 submitBtn.textContent = "🔍 Quét & Phân Tích";
                 submitBtn.disabled = false;
-            }
+            } 
         });
     </script>
 </body>
