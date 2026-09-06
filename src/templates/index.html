@@ -617,6 +617,40 @@
                     downloadBinaryBtn.classList.remove("hidden");
                 }
 
+
+                // --- BẮT ĐẦU PHẦN GẮN DỮ LIỆU ĐÁNH GIÁ (TEXT) ---
+                
+                // 1. Cập nhật Đánh giá HSV
+                if (data.hsv_ratio !== undefined) {
+                    document.getElementById("hsvRatioResult").textContent = data.hsv_ratio;
+                }
+                
+                // Lấy thông số từ thanh trượt để in ra báo cáo HSV
+                const hMinVal = document.getElementById("hMin").value;
+                const sMinVal = document.getElementById("sMin").value;
+                const vMinVal = document.getElementById("vMin").value;
+                const hMaxVal = document.getElementById("hMax").value;
+                const sMaxVal = document.getElementById("sMax").value;
+                const vMaxVal = document.getElementById("vMax").value;
+                
+                document.getElementById("hsvRangeApplied").textContent = 
+                    `LOWER: (${hMinVal}, ${sMinVal}, ${vMinVal}) ➔ UPPER: (${hMaxVal}, ${sMaxVal}, ${vMaxVal})`;
+
+                // 2. Cập nhật Đánh giá Histogram (Độ tương phản)
+                if (data.contrast_before !== undefined) {
+                    document.getElementById("contrastBeforeResult").textContent = data.contrast_before;
+                    document.getElementById("contrastAfterResult").textContent = data.contrast_after;
+                }
+                
+                // 3. Cập nhật các chỉ số Thống kê
+                if (data.stats) {
+                    document.getElementById("meanResult").textContent = data.stats.mean;
+                    document.getElementById("stdResult").textContent = data.stats.std;
+                    document.getElementById("statThresholdVal").textContent = data.stats.threshold;                   
+                }
+                
+                // --- KẾT THÚC PHẦN GẮN DỮ LIỆU ĐÁNH GIÁ ---
+                
                 // 5. Gắn ảnh Histogram (Cân bằng sáng)
                 if (data.hist_before_b64) {
                     document.getElementById("histBeforeImg").src = "data:image/png;base64," + data.hist_before_b64;
