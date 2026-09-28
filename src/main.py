@@ -82,7 +82,9 @@ def process_hsv_segmentation(image_bgr, lower_hsv, upper_hsv, min_area):
     hsv_img = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
     
     # Lọc tạo mặt nạ (Mask) dựa trên ngưỡng người dùng chọn
-    mask = cv2.inRange(hsv_img, np.array(lower_hsv, dtype=np.uint8), np.array(upper_hsv, dtype=np.uint8))
+    mask = cv2.inRange(
+        hsv_img, np.array(lower_hsv, dtype=np.uint8), 
+        np.array(upper_hsv, dtype=np.uint8))
 
     # Lọc nhiễu bằng Morphology (Đóng / Mở)
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
@@ -138,7 +140,11 @@ async def analyze_image(
         # 1. KỸ THUẬT HSV: Tách vật thể
         lower_hsv = [h_min, s_min, v_min]
         upper_hsv = [h_max, s_max, v_max]
-        mask_img, segmented_img, object_count = process_hsv_segmentation(img_resized, lower_hsv, upper_hsv, min_area)
+        mask_img, segmented_img, object_count = process_hsv_segmentation(
+                                                    img_resized, 
+                                                    lower_hsv, 
+                                                    upper_hsv, 
+                                                    min_area)
         
         mask_b64 = image_to_base64(mask_img, ".png")
         segmented_b64 = image_to_base64(segmented_img, ".jpg")
