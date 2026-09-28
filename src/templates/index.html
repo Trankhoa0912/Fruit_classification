@@ -456,6 +456,7 @@
                 <div>
                     <h3 class="text-center font-semibold text-slate-700 mb-2">1. Biểu đồ ảnh gốc</h3>
                     <div class="bg-slate-100 rounded-xl p-2">
+                        <img id="histOriginalImg" src="" class="w-full rounded-lg border border-slate-200" alt="Ảnh đầu vào">
                         <img id="histBeforeImg" src="" class="w-full rounded-lg" alt="Histogram Trước">
                     </div>
                 </div>
@@ -652,6 +653,9 @@
                 // --- KẾT THÚC PHẦN GẮN DỮ LIỆU ĐÁNH GIÁ ---
                 
                 // 5. Gắn ảnh Histogram (Cân bằng sáng)
+                if (data.before_image_b64) {
+                    document.getElementById("histOriginalImg").src = "data:image/jpeg;base64," + data.before_image_b64;
+                }
                 if (data.hist_before_b64) {
                     document.getElementById("histBeforeImg").src = "data:image/png;base64," + data.hist_before_b64;
                 }

@@ -55,12 +55,13 @@ def generate_color_histogram(image_bgr, bins):
             [bins],
             [0, 256]
         )
+        cv2.normalize(hist, hist, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
         plt.plot(x, hist.ravel(), color=color, linewidth=1.5, label=labels[i])
 
     plt.xlim([0, 255])
     plt.title("Color Histogram", fontsize=10)
     plt.xlabel("Pixel Intensity", fontsize=8)
-    plt.ylabel("Number of Pixels", fontsize=8)
+    plt.ylabel("Normalized Frequency", fontsize=8)
     plt.legend()
     plt.tight_layout()
 
